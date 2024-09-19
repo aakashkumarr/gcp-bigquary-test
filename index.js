@@ -10,11 +10,7 @@ app.get('/', async (req, res) => {
     try {
         // Define the SQL query to retrieve data from the public dataset
         const query = `
-      SELECT name, gender, number
-      FROM \`bigquery-public-data.usa_names.usa_1910_current\`
-      WHERE year = 2020
-      ORDER BY number DESC
-      LIMIT 10;
+      SELECT firstName, lastName, age FROM \`graphic-ring-435605-d0.bq_user_test.users\`;
     `;
 
         // Run the query on BigQuery
@@ -32,10 +28,7 @@ app.get('/all', async (req, res) => {
         // Define the SQL query to retrieve data from the public dataset
         const query = `
       SELECT *
-      FROM \`bigquery-public-data.usa_names.usa_1910_current\`
-      WHERE year = 2020
-      ORDER BY number DESC
-      LIMIT 10;
+      FROM \`graphic-ring-435605-d0.bq_user_test.users\`;
     `;
 
         // Run the query on BigQuery
