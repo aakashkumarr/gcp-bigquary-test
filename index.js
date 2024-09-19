@@ -3,9 +3,6 @@ const { BigQuery } = require('@google-cloud/bigquery');
 const path = require('path')
 const app = express();
 const port = process.env.PORT || 8080;
-
-
-process.env.GOOGLE_APPLICATION_CREDENTIALS = path.join(__dirname, './graphic-ring-435605-d0-c273fd9da9fb.json')
 // Instantiate BigQuery client
 const bigquery = new BigQuery();
 // Define a route that queries the public BigQuery dataset for USA Names
