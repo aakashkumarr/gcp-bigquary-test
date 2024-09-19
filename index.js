@@ -1,6 +1,5 @@
 const express = require('express');
 const { BigQuery } = require('@google-cloud/bigquery');
-const path = require('path')
 const app = express();
 const port = process.env.PORT || 8080;
 // Instantiate BigQuery client
