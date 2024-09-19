@@ -1,0 +1,40 @@
+Deploying a Node.js App to Cloud Run Using Cloud Build
+This guide outlines how to deploy a Node.js application to Google Cloud Run using Cloud Build, without the need to install Docker locally. We’ll go through the essential steps to containerize the app and deploy it directly from the source.
+Prerequisites:
+- Google Cloud SDK installed.
+- A Google Cloud project set up.
+- Node.js application code ready.
+Step 1: Install Google Cloud SDK
+Ensure the Google Cloud SDK is installed. If not, download and install it from: https://cloud.google.com/sdk/docs/install. After installation, authenticate your account using:
+`gcloud auth login`.
+Step 2: Set Up Google Cloud Project
+Create a new project and enable required services:
+1. `gcloud projects create your-project-id --set-as-default`
+2. Enable the necessary services:
+`gcloud services enable run.googleapis.com cloudbuild.googleapis.com`
+Step 3: Create a Dockerfile
+In your Node.js project directory, create a `Dockerfile` with the following content:
+FROM node:18
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install --only=production
+COPY . .
+EXPOSE 8080
+CMD [ "node", "app.js" ]
+Step 4: Deploy Using Cloud Build and Cloud Run
+Deploy the app directly to Cloud Run using:
+`gcloud run deploy your-service-name --source . --platform managed --region us-central1 --allow-unauthenticated`
+This command builds the container using Cloud Build and deploys it to Cloud Run.
+Step 5: Access the Deployed Service
+After deployment, you will get a URL to access your service. Use that URL to access your Node.js app.
+Summary of Steps
+- Install Google Cloud SDK and authenticate.
+- Set up a Google Cloud project and enable required services.
+- Create a Dockerfile for your Node.js app.
+- Deploy using Cloud Build and Cloud Run.
+- Access the deployed service using the provided URL.
+gcloud run deploy big-query-test --source . --platform managed --region us-central1 --allow-unauthenticated
+
+
+
+atuh token : gcloud auth print-identity-token

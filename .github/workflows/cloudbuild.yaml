@@ -1,0 +1,59 @@
+name: Lint, Build, and Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-build-deploy:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]  # Test against multiple Node.js versions
+
+    steps:
+    # Checkout the code
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Set up Node.js
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    # Install dependencies
+    - name: Install dependencies
+      run: npm install
+
+    # Run ESLint to lint the code
+    - name: Run ESLint
+      run: npm run lint
+
+    # Authenticate Google Cloud
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+    # Set up Google Cloud SDK
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+    # Build and deploy to Cloud Run using Cloud Build
+    - name: Build and deploy to Cloud Run
+      run: |
+        gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-app
+        gcloud run deploy my-app \
+          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-app \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated
