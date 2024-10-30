@@ -12,7 +12,7 @@ app.get('/', async (req, res) => {
     try {
         // Define the SQL query to retrieve data
         const query = `
-      SELECT firstName, lastName, age FROM \`graphic-ring-435605-d0.bq_user_test.users\`;
+      SELECT firstName, lastName, age FROM \`${cred.projectId}.bq_user_test.users\`;
     `;
 
         // Run the query on BigQuery
